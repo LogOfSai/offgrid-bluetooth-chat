@@ -1,12 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { DeviceScanner } from '@/components/DeviceScanner';
+import { ChatInterface } from '@/components/ChatInterface';
+import { ChatDevice } from '@/services/bluetoothService';
 
 const Index = () => {
+  const [selectedDevice, setSelectedDevice] = useState<ChatDevice | null>(null);
+
+  const handleDeviceConnect = (device: ChatDevice) => {
+    setSelectedDevice(device);
+  };
+
+  const handleBackToScanner = () => {
+    setSelectedDevice(null);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {selectedDevice ? (
+        <ChatInterface 
+          device={selectedDevice} 
+          onBack={handleBackToScanner}
+        />
+      ) : (
+        <DeviceScanner onDeviceConnect={handleDeviceConnect} />
+      )}
     </div>
   );
 };
